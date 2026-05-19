@@ -26,6 +26,17 @@ function createPlayer (name, marker){
 function gameManagement(player1, player2){
     let isPlayerOneTurn
 
+    const winningConditions = [
+        [[0,0], [0,1], [0,2]],
+        [[1,0], [1,1], [1,2]],
+        [[2,0], [2,1], [2,2]],
+        [[0,0], [1,0], [2,0]],
+        [[0,1], [1,1], [2,1]],
+        [[0,2], [1,2], [2,2]],
+        [[0,0], [1,1], [2,2]],
+        [[0,2], [1,1], [2,0]],
+    ]
+
     function setFirstTurn(){
         return Math.floor((Math.random() * 2)) === 0
     }
@@ -45,7 +56,6 @@ function gameManagement(player1, player2){
     }
 }
 
-
 const player1 = createPlayer('Emanuel', 'X')
 const player2 = createPlayer('Test', 'O')
 
@@ -57,6 +67,7 @@ console.log(game.currentTurn())
 
 
 const test = boardManagement();
-test.selectPosition('X', 0, 0)
+test.selectPosition('X', 2, 0)
 console.log(gameSetup.board)
 
+console.log(gameSetup.board[0][0])
