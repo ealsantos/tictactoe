@@ -16,15 +16,47 @@ function boardManagement(){
     }
 }
 
-// factory function Game
-
 function createPlayer (name, marker){
+        return {
+            name,
+            marker
+        }
+    }
+
+function gameManagement(player1, player2){
+    let isPlayerOneTurn
+
+    function setFirstTurn(){
+        return Math.floor((Math.random() * 2)) === 0
+    }
+
+    function initGame(){
+        isPlayerOneTurn = setFirstTurn()
+    }
+
+    function switchTurn(){
+        isPlayerOneTurn = !isPlayerOneTurn
+    }
+
     return {
-        name,
-        marker
+        startGame: initGame,
+        currentTurn: function(){ return isPlayerOneTurn },
+        changePlayerTurn: switchTurn
     }
 }
+
+
+const player1 = createPlayer('Emanuel', 'X')
+const player2 = createPlayer('Test', 'O')
+
+const game = gameManagement(player1, player2)
+game.startGame()
+console.log(game.currentTurn())
+game.changePlayerTurn()
+console.log(game.currentTurn())
+
 
 const test = boardManagement();
 test.selectPosition('X', 0, 0)
 console.log(gameSetup.board)
+
