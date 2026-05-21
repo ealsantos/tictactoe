@@ -7,13 +7,13 @@
 })();
 
 function boardManagement(){
-    function placeMarker(marker, columnIndex, rowIndex){
-        return gameSetup.board[columnIndex][rowIndex] = marker
+    function placeMarker(marker, rowIndex, columnIndex){
+        return gameSetup.board[rowIndex][columnIndex] = marker
     }
 
-    function makeMove(marker, columnIndex, rowIndex){
-        placeMarker(marker, columnIndex, rowIndex)
-        game.verifyWinner(marker)
+    function makeMove(player, rowIndex, columnIndex){
+        placeMarker(player.marker, rowIndex, columnIndex)
+        game.verifyWinner(player)
     }
 
     function resetGame(){
@@ -21,16 +21,17 @@ function boardManagement(){
     }
 
     return {
-        selectPosition: placeMarker,
         makeMove,
         resetGame
     }
 }
 
 function createPlayer (name, marker){
+    let playerScore = 0
         return {
             name,
-            marker
+            marker,
+            playerScore
         }
     }
 
@@ -59,7 +60,7 @@ function gameManagement(player1, player2){
 
     function checkDraw() {
         let flatBoard = gameSetup.board.flat()
-        return flatBoard.some((item) => typeof item === 'Number')
+        return flatBoard.some((item) => typeof item === 'number')
     }
 
     function setFirstTurn(){
@@ -74,20 +75,24 @@ function gameManagement(player1, player2){
         isPlayerOneTurn = !isPlayerOneTurn
     }
 
-    function afterMove(marker){
-        if (checkWinner(marker)){
+    function setLoserFirst(winner){ isPlayerOneTurn = winner === player1 ? false : true
+        console.log(winner)
+    }
+
+    function afterMove(player){
+        if (checkWinner(player.marker)){
+            player.playerScore++
             board.resetGame()
+            setLoserFirst(player)
         } else if (!checkDraw()){
             board.resetGame()
-        } else {
             switchTurn()
-        }
+        } 
     }
 
     return {
         startGame: initGame,
         currentTurn: function(){ return isPlayerOneTurn },
-        changePlayerTurn: switchTurn,
         verifyWinner: afterMove
     }
 }
@@ -98,15 +103,5 @@ const player2 = createPlayer('Test', 'O')
 const game = gameManagement(player1, player2)
 const board = boardManagement()
 
-
+// Setup
 game.startGame()
-board.makeMove('X', 0, 0)
-board.makeMove('O', 0, 1)
-board.makeMove('X', 0, 2)
-board.makeMove('X', 1, 0)
-board.makeMove('O', 1, 1)
-board.makeMove('X', 1, 2)
-board.makeMove('O', 2, 0)
-console.log('Before last move:', gameSetup.board)
-board.makeMove('O', 2, 2)
-console.log('After last move:', gameSetup.board)
