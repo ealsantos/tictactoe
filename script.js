@@ -2,7 +2,7 @@
     const boardSlots = [[1,2,3],[4,5,6],[7,8,9]];
 
     return{
-        board: boardSlots
+        board: boardSlots,
     }
 })();
 
@@ -11,8 +11,19 @@ function boardManagement(){
         return gameSetup.board[columnIndex][rowIndex] = marker
     }
 
+    function makeMove(marker, columnIndex, rowIndex){
+        placeMarker(marker, columnIndex, rowIndex)
+        game.verifyWinner(marker)
+    }
+
+    function resetGame(){
+        gameSetup.board = [[1,2,3],[4,5,6],[7,8,9]]
+    }
+
     return {
-        selectPosition: placeMarker
+        selectPosition: placeMarker,
+        makeMove,
+        resetGame
     }
 }
 
@@ -60,7 +71,7 @@ function gameManagement(player1, player2){
 
     function afterMove(marker){
         if (checkWinner(marker)){
-            console.log('reset game')
+            board.resetGame()
         } else {
             console.log('switching turn')
             switchTurn()
@@ -80,12 +91,13 @@ const player2 = createPlayer('Test', 'O')
 
 const game = gameManagement(player1, player2)
 const board = boardManagement()
-game.startGame()
-// simulate player 1 winning top row
-console.log(game.currentTurn())
-board.selectPosition('X', 0, 0)
-board.selectPosition('X', 0, 1)
-board.selectPosition('X', 0, 1)
 
-game.verifyWinner(player1.marker)
-console.log(game.currentTurn())
+
+game.startGame()
+board.makeMove('X', 0, 0)
+board.makeMove('X', 0, 1)
+console.log(gameSetup.board)
+board.makeMove('X', 0, 2)
+console.log(gameSetup.board)
+
+
