@@ -57,6 +57,11 @@ function gameManagement(player1, player2){
         return hasWinner
     }
 
+    function checkDraw() {
+        let flatBoard = gameSetup.board.flat()
+        return flatBoard.some((item) => typeof item === 'Number')
+    }
+
     function setFirstTurn(){
         return Math.floor((Math.random() * 2)) === 0
     }
@@ -72,8 +77,9 @@ function gameManagement(player1, player2){
     function afterMove(marker){
         if (checkWinner(marker)){
             board.resetGame()
+        } else if (!checkDraw()){
+            board.resetGame()
         } else {
-            console.log('switching turn')
             switchTurn()
         }
     }
@@ -95,9 +101,12 @@ const board = boardManagement()
 
 game.startGame()
 board.makeMove('X', 0, 0)
-board.makeMove('X', 0, 1)
-console.log(gameSetup.board)
+board.makeMove('O', 0, 1)
 board.makeMove('X', 0, 2)
-console.log(gameSetup.board)
-
-
+board.makeMove('X', 1, 0)
+board.makeMove('O', 1, 1)
+board.makeMove('X', 1, 2)
+board.makeMove('O', 2, 0)
+console.log('Before last move:', gameSetup.board)
+board.makeMove('O', 2, 2)
+console.log('After last move:', gameSetup.board)
