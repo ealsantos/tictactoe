@@ -12,8 +12,12 @@ function boardManagement(){
     }
 
     function makeMove(player, rowIndex, columnIndex){
-        placeMarker(player.marker, rowIndex, columnIndex)
-        game.verifyWinner(player)
+        if (typeof gameSetup.board[rowIndex][columnIndex] === 'number'){
+            placeMarker(player.marker, rowIndex, columnIndex)
+            game.verifyWinner(player)
+        } else {
+            console.log('already taken')
+        } 
     }
 
     function resetGame(){
