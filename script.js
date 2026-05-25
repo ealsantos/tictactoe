@@ -16,7 +16,7 @@ function boardManagement(){
             placeMarker(player.marker, rowIndex, columnIndex)
             game.verifyWinner(player)
         } else {
-            renderGame.showGameResult(`This slot is already taken!`)
+            alert(`This slot is already taken!`)
         } 
 
         renderGame.getTurnInfo()
@@ -40,6 +40,9 @@ function createPlayer (name, marker){
             playerScore
         }
     }
+
+let player1
+let player2
 
 function gameManagement(player1, player2){
     let isPlayerOneTurn
@@ -113,9 +116,74 @@ function gameManagement(player1, player2){
 const gameContainer = document.querySelector('.gameBoard')
 
 function displayManagement(){
+    const dialog = document.getElementById("gameMessage")
+    const closeButton = document.getElementById("closeMessage")
+    const startButton = document.getElementById("startGame")
+    const resetButton = document.getElementById("resetGame")
+
+    closeButton.addEventListener("click", () => {
+        dialog.close()
+        renderGame.gameRendering(gameSetup.board)
+        renderGame.getTurnInfo()
+    })
+
+    const player1Input = document.getElementById("player1Name")
+    const player2Input = document.getElementById("player2Name")
+
+    function checkInputs(){
+        if(player1Input.value !== '' && player2Input.value !== ''){
+            startButton.disabled = false
+        } else {
+            startButton.disabled = true
+        }
+    }
+
+    player1Input.addEventListener("input", checkInputs)
+    player2Input.addEventListener("input", checkInputs)
+    
+
+    startButton.addEventListener("click", () => {
+        const player1name = document.getElementById("player1Name").value
+        const player2name = document.getElementById("player2Name").value
+        player1 = createPlayer(player1name, 'X')
+        player2 = createPlayer(player2name, 'O')
+        game = gameManagement(player1, player2)
+        game.startGame()
+        renderGame.gameRendering(gameSetup.board)
+        renderGame.getTurnInfo()
+        renderGame.playerScoresRendering(player1, player2)
+        startButton.classList.add("hidden");
+        resetButton.classList.remove("hidden")
+        document.querySelector('.results').classList.remove('hidden')
+    })
+
+    resetButton.addEventListener("click", () => {
+        board.resetGame()
+        firstTurnText.textContent = ''
+        document.getElementById("player1Score").textContent = ''
+        document.getElementById("player2Score").textContent = ''
+        player1 = undefined
+        player2 = undefined
+        game = undefined
+        document.getElementById("player1Name").value = ''
+        document.getElementById("player2Name").value = ''
+        resetButton.classList.add("hidden");
+        startButton.classList.remove("hidden")
+        document.querySelector('.results').classList.add('hidden')
+        renderGame.gameRendering(gameSetup.board)
+        checkInputs()
+    })
+
+    function showGameResult(message){
+        const dialog = document.getElementById("gameMessage");
+        const statement = document.getElementById("messageText");
+        statement.textContent = message
+        dialog.showModal();
+    }
 
     function gameRendering(currentBoard) {
         gameContainer.innerHTML = ''
+        if(!game) return
         for (let i = 0; i < currentBoard.length; i++) {
             for (let j = 0; j < currentBoard[i].length; j++) {
                 const gamePositions = document.createElement("div");
@@ -143,22 +211,9 @@ function displayManagement(){
     const firstTurnText = document.getElementById("firstTurnText")
 
     function getTurnInfo(){
+        if(!game) return
         let currentPlayer = game.getActivePlayer()
         firstTurnText.textContent = `Currently Playing: ${currentPlayer.name}`
-    }
-
-    function showGameResult(message){
-        const dialog = document.getElementById("gameMessage");
-        const closeButton = document.getElementById("closeMessage")
-        const statement = document.getElementById("messageText");
-
-        statement.textContent = message
-
-        dialog.showModal()
-        closeButton.addEventListener("click", () => {
-        dialog.close();
-            });
-
     }
 
     return {
@@ -169,15 +224,6 @@ function displayManagement(){
     }
 }
 
-// game tests
-const player1 = createPlayer('Emanuel', 'X')
-const player2 = createPlayer('Test', 'O')
-
-const game = gameManagement(player1, player2)
+let game
 const board = boardManagement()
 const renderGame = displayManagement()
-
-game.startGame()
-renderGame.gameRendering(gameSetup.board)
-renderGame.playerScoresRendering(player1, player2)
-renderGame.getTurnInfo()
