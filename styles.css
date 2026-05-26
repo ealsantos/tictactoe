@@ -1,3 +1,115 @@
-.hidden {
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+h1{
+    font-size: 48px;
+    font-weight: 700;
+    margin: 20 20 20;
+}
+
+h1, 
+.header > p,
+.gameSetup,
+.resetAndTurn {
+    text-align: center;
+}
+
+.hidden{
     display: none;
+}
+
+.gameBoard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+input,
+button {
+    height: 30px;
+    margin-top: 30px;
+    padding: 0 5px;
+}
+
+.gameBoard div{
+    border-style: solid;
+    border-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    cursor: pointer;
+    width: 100px;
+    height: 100px; 
+}
+
+.resetAndTurn p,
+.header > p,
+dialog > p
+{
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.flex,
+.results>div{
+    display: flex;
+    font-size: 24px;
+    margin-left: 6px;
+}
+
+.gameBoard div:nth-child(1),
+.gameBoard div:nth-child(2),
+.gameBoard div:nth-child(3){
+    border-top:none;
+}
+
+.gameBoard div:nth-child(1),
+.gameBoard div:nth-child(4),
+.gameBoard div:nth-child(7){
+    border-left: none;
+}
+
+.gameBoard div:nth-child(3),
+.gameBoard div:nth-child(6),
+.gameBoard div:nth-child(9){
+    border-right: none;
+}
+
+.gameBoard div:nth-child(7),
+.gameBoard div:nth-child(8),
+.gameBoard div:nth-child(9){
+    border-bottom: none;
+}
+
+.results h2 {
+    width: 100%;
+    text-align: center;
+}
+
+.results.visible {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+dialog {
+    background-color: grey 50%;
+    border-radius: 10px;
+    margin: auto;
+    width: 20%
+}
+
+dialog > *{
+    margin: 10px;
 }

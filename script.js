@@ -145,6 +145,7 @@ function displayManagement(){
     startButton.addEventListener("click", () => {
         const player1name = document.getElementById("player1Name").value
         const player2name = document.getElementById("player2Name").value
+        const inputsSection = document.querySelector('.gameSetup')
         player1 = createPlayer(player1name, 'X')
         player2 = createPlayer(player2name, 'O')
         game = gameManagement(player1, player2)
@@ -155,6 +156,10 @@ function displayManagement(){
         startButton.classList.add("hidden");
         resetButton.classList.remove("hidden")
         document.querySelector('.results').classList.remove('hidden')
+        document.querySelector('.results').classList.add('visible')
+        player1Input.classList.add("hidden")
+        player2Input.classList.add("hidden")
+        
     })
 
     resetButton.addEventListener("click", () => {
@@ -169,7 +174,10 @@ function displayManagement(){
         document.getElementById("player2Name").value = ''
         resetButton.classList.add("hidden");
         startButton.classList.remove("hidden")
+        document.querySelector('.results').classList.remove('visible')
         document.querySelector('.results').classList.add('hidden')
+        player1Input.classList.remove("hidden")
+        player2Input.classList.remove("hidden")
         renderGame.gameRendering(gameSetup.board)
         checkInputs()
     })
@@ -187,7 +195,7 @@ function displayManagement(){
         for (let i = 0; i < currentBoard.length; i++) {
             for (let j = 0; j < currentBoard[i].length; j++) {
                 const gamePositions = document.createElement("div");
-                gamePositions.textContent = currentBoard[i][j]
+                gamePositions.textContent = typeof currentBoard[i][j] === 'string' ? currentBoard[i][j] : ''
                 gameContainer.appendChild(gamePositions)
 
                 const activePlayer = game.currentTurn() ? player1 : player2
@@ -203,8 +211,8 @@ function displayManagement(){
         const playerOneScore = document.getElementById("player1Score")
         const playerTwoScore = document.getElementById("player2Score")
 
-        playerOneScore.textContent = `${player1.name}: ${player1.playerScore}`
-        playerTwoScore.textContent = `${player2.name}: ${player2.playerScore}`
+        playerOneScore.textContent = `${player1.name} ${player1.playerScore} - `
+        playerTwoScore.textContent = `${player2.playerScore} ${player2.name}`
     }
 
 
